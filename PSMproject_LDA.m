@@ -1,5 +1,9 @@
 % PSM Decoding LDA project: Zeynep Elif Sab, 19/08/2023
 
+% This code is adapted with significant changes from the Mathworks sample LDA code shown in the course
+%"Probabilistic and Statistical Modeling II", Seminar 2, SS2023 (The Math Works, Inc., 2023).
+
+
 % This code decodes three imagery conditions(ImagPress,ImagFlutt,ImagVibro) from two regions of
 % interests: right BA2 and right SII.
 
