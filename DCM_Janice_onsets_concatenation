@@ -1,0 +1,52 @@
+% set TR to 2, based on OG GLM
+TR = 2
+
+% calculate number of rows and cols in 'onsets' cell array
+num_rows = size(onsets,1);
+num_cols = size(onsets, 2);
+
+% create new empty cell array for concatenated values to be stored
+new_onsets = cell(1, num_cols);
+
+% define scans per trial, based on OG GLM
+scans_per_trial = 242
+
+% create array to hold the # of scans I want to add based on row index
+offsets = [0, scans_per_trial, (scans_per_trial*2), (scans_per_trial*3), (scans_per_trial*4), (scans_per_trial*5)]
+
+% loop to iterate through each column of 'onsets' cell array
+% first through rows of col 1, then col 2, etc.
+% we extract values from current row and column, initialise new array
+% then iterate through elements of each innercell to transform the values
+
+for col = 1:num_cols
+    z=onsets{1,col};
+    new_col = z;
+    
+    for row = 2:num_rows
+        a=onsets{row,col};
+        new_a=zeros(size(a));
+        
+        for i=1:length(a)
+            new_a(i) = a(i) + offsets(row) * TR;
+        end
+        
+        new_col = [new_col new_a];
+    end
+    
+    new_onsets{1,col} = new_col;
+    
+end
+
+% combine columns 1-3, and 4-6 together to form conjoined stim and imagery conditions
+new_onsets_regressors = [];
+new_onsets_regressors{1,1} = [new_onsets{1,1} new_onsets{1,2} new_onsets{1,3}]
+new_onsets_regressors{1,2} = [new_onsets{1,4} new_onsets{1,5} new_onsets{1,6}]
+new_onsets_regressors{1,3} = [new_onsets{1,7}]
+new_onsets_regressors{1,4} = [new_onsets{1,8}]
+new_onsets_regressors{1,5} = [new_onsets{1,9}]
+new_onsets_regressors{1,6} = [new_onsets{1,10}]
+new_onsets_regressors{1,7} = [new_onsets{1,11}]
+
+% then we save the file to use to estimate GLM
+save('new_onsets_regressors.mat', 'new_onsets_regressors');
